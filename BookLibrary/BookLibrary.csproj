@@ -21,8 +21,4 @@
     <ProjectReference Include="..\BookLibrary.DataAccess\BookLibrary.DataAccess.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Test\" />
-  </ItemGroup>
-
 </Project>
