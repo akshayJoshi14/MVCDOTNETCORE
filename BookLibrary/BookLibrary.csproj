@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\--CoverTypeController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\CoverType\Create.cshtml" />
+    <None Include="Views\CoverType\Delete.cshtml" />
+    <None Include="Views\CoverType\Edit.cshtml" />
+    <None Include="Views\CoverType\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />

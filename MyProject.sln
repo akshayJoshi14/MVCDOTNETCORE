@@ -4,12 +4,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLibrary", "BookLibrary\BookLibrary.csproj", "{61C2A457-DD46-4DC6-B5F1-AA7F1577EF19}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3BC1BD33-D352-477B-8B10-49777B69F22C} = {3BC1BD33-D352-477B-8B10-49777B69F22C}
+		{48390583-E55F-4EF5-A052-95F4797409AC} = {48390583-E55F-4EF5-A052-95F4797409AC}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLibrary.DataAccess", "BookLibrary.DataAccess\BookLibrary.DataAccess.csproj", "{0ED6173E-7DE1-4626-BB03-EC3C69FA4517}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLibrary.DataAccess", "BookLibrary.DataAccess\BookLibrary.DataAccess.csproj", "{0ED6173E-7DE1-4626-BB03-EC3C69FA4517}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLibrary.Models", "BookLibrary.Models\BookLibrary.Models.csproj", "{48390583-E55F-4EF5-A052-95F4797409AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLibrary.Models", "BookLibrary.Models\BookLibrary.Models.csproj", "{48390583-E55F-4EF5-A052-95F4797409AC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3BC1BD33-D352-477B-8B10-49777B69F22C} = {3BC1BD33-D352-477B-8B10-49777B69F22C}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLibrary.Utility", "BookLibrary.Utility\BookLibrary.Utility.csproj", "{3BC1BD33-D352-477B-8B10-49777B69F22C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLibrary.Utility", "BookLibrary.Utility\BookLibrary.Utility.csproj", "{3BC1BD33-D352-477B-8B10-49777B69F22C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace BookLibrary.DataAccess.Repository
 {
-    public class CategoryRepositoty : Repositary<Category>, ICategoryRepository
+    public class CategoryRepository : Repositary<Category>, ICategoryRepository
     {
         private ApplicationDbContext _db;
 
-        public CategoryRepositoty(ApplicationDbContext db) : base(db)
+        public CategoryRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
