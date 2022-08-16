@@ -36,7 +36,7 @@ namespace BookLibrary.DataAccess.Repository
         {
             IQueryable<T> query = dbSet;
 
-            query.Where(filter);
+            query = query.Where(filter);
 
             return query.FirstOrDefault();
         }

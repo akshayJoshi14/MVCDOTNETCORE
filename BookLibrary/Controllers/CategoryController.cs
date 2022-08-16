@@ -1,4 +1,5 @@
 ﻿using BookLibrary.DataAccess.Data;
+using BookLibrary.DataAccess.Repository.IRepository;
 using BookLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -7,15 +8,15 @@ namespace BookLibrary.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly ICategoryRepository _db;
 
-        public CategoryController(ApplicationDbContext db)
+        public CategoryController(ICategoryRepository db)
         {
             _db = db;
         }
         public IActionResult Index()
         {
-            IEnumerable<Category> objCategoryList = _db.Categories;
+            IEnumerable<Category> objCategoryList = _db.GetAll();
             return View(objCategoryList);
         }
 
@@ -38,8 +39,8 @@ namespace BookLibrary.Controllers
             // in core, we can use ModelState.Isvalid as server side validation.
             if (ModelState.IsValid)
             {
-                _db.Categories.Add(obj);
-                _db.SaveChanges();
+                _db.Add(obj);
+                _db.Save();
                 TempData["success"] = "Category created successfully";
                 return RedirectToAction("Index");
             }
@@ -54,8 +55,8 @@ namespace BookLibrary.Controllers
             {
                 return NotFound();
             }
-            var categroyFromDb = _db.Categories.Find(id);
-            //categroyFromDb = _db.Categories.FirstOrDefault(cat => cat.Id == id);
+            // var categroyFromDb = _db.Find(id);
+            var categroyFromDb = _db.GetFirstOrDefault(cat => cat.Id == id);
             //categroyFromDb = _db.Categories.SingleOrDefault(cat => cat.Id == id);
 
             if (categroyFromDb == null)
@@ -75,11 +76,12 @@ namespace BookLibrary.Controllers
                 // on that particular field we should give property name of that model.
                 ModelState.AddModelError("Name", "The DispalyOrder cannot exactly same as Name.");
             }
+
             // in core, we can use ModelState.Isvalid as server side validation.
             if (ModelState.IsValid)
             {
-                _db.Categories.Update(obj);
-                _db.SaveChanges();
+                _db.Update(obj);
+                _db.Save();
                 TempData["success"] = "Category updated successfully";
                 return RedirectToAction("Index");
             }
@@ -93,8 +95,8 @@ namespace BookLibrary.Controllers
             {
                 return NotFound();
             }
-            var categroyFromDb = _db.Categories.Find(id);
-            //categroyFromDb = _db.Categories.FirstOrDefault(cat => cat.Id == id);
+            //var categroyFromDb = _db.Categories.Find(id);
+            var categroyFromDb = _db.GetFirstOrDefault(cat => cat.Id == id);
             //categroyFromDb = _db.Categories.SingleOrDefault(cat => cat.Id == id);
 
             if (categroyFromDb == null)
@@ -108,15 +110,15 @@ namespace BookLibrary.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(int? id)
         {
-            var obj = _db.Categories.Find(id);
+            var obj = _db.GetFirstOrDefault(u => u.Id == id);
 
             if (obj == null)
             {
                 return NotFound();
             }
 
-            _db.Categories.Remove(obj);
-            _db.SaveChanges();
+            _db.Remove(obj);
+            _db.Save();
             TempData["success"] = "Category deleted successfully";
             return RedirectToAction("Index");
 
