@@ -7,14 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\--CoverTypeController.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\CoverType\Create.cshtml" />
-    <None Include="Views\CoverType\Delete.cshtml" />
-    <None Include="Views\CoverType\Edit.cshtml" />
-    <None Include="Views\CoverType\Index.cshtml" />
+    <None Include="Areas\Admin\Views\CoverType\Create.cshtml" />
+    <None Include="Areas\Admin\Views\CoverType\Delete.cshtml" />
+    <None Include="Areas\Admin\Views\CoverType\Edit.cshtml" />
+    <None Include="Areas\Admin\Views\CoverType\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

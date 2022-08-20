@@ -4,8 +4,9 @@ using BookLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
-namespace BookLibrary.Controllers
+namespace BookLibrary.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CoverTypeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -90,7 +91,7 @@ namespace BookLibrary.Controllers
             return View(coverTypeFromDb);
         }
 
-        [HttpPost,ActionName("Delete")]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(int? id)
         {
