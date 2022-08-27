@@ -1,6 +1,7 @@
 ﻿using BookLibrary.DataAccess.Data;
 using BookLibrary.DataAccess.Repository.IRepository;
 using BookLibrary.Models;
+using BookLibrary.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
@@ -26,31 +27,45 @@ namespace BookLibrary.Areas.Admin.Controllers
         // Get Producttype create Edit form
         public IActionResult Upsert(int? id)
         {
-            Product product = new();
-            IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll().Select(
-                u => new SelectListItem
+            ProductVM productVM = new()
+            {
+                product = new(),
+                CategoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
                 {
-                    Text = u.Name,
-                    Value = u.Id.ToString()
-                });
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                }),
+                CoverTypeList = _unitOfWork.CoverType.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                }),
+            };
 
-            IEnumerable<SelectListItem> CoverTypeList = _unitOfWork.CoverType.GetAll().Select(
-                u => new SelectListItem
-                {
-                    Text = u.Name,
-                    Value = u.Id.ToString()
-                });
+            //IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll().Select(
+            //    u => new SelectListItem
+            //    {
+            //        Text = u.Name,
+            //        Value = u.Id.ToString()
+            //    });
+
+            //IEnumerable<SelectListItem> CoverTypeList = _unitOfWork.CoverType.GetAll().Select(
+            //    u => new SelectListItem
+            //    {
+            //        Text = u.Name,
+            //        Value = u.Id.ToString()
+            //    });
 
             if (id == null || id == 0)
             {
                 // viewBag is normally wrapper of view data.
                 // and key using same localtion as we are passing in view data key.
                 // Example - ViewBag.CategoryList = ViewData["CoverTypeList"]
-                ViewBag.CategoryList = CategoryList;
+                //ViewBag.CategoryList = CategoryList;
 
-                // view data
-                ViewData["CoverTypeList"] = CoverTypeList;
-                return View(product);
+                //// view data
+                //ViewData["CoverTypeList"] = CoverTypeList;
+                return View(productVM);
             }
             else
             {
