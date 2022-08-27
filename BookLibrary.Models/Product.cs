@@ -44,7 +44,7 @@ namespace BookLibrary.Models
         public string ImageUrl { get; set; }
 
         [Required]
-        public int CategroyId { get; set; }
+        public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
 

@@ -35,7 +35,7 @@ namespace BookLibrary.DataAccess.Repository
                 objFromDB.ListPrice = obj.ListPrice;
                 objFromDB.Price100 = obj.Price100;
                 objFromDB.Description = obj.Description;
-                objFromDB.CategroyId = obj.CategroyId;
+                objFromDB.CategoryId = obj.CategoryId;
                 objFromDB.Author = obj.Author;
                 objFromDB.CoverTypeId = obj.CoverTypeId;
 
