@@ -28,9 +28,9 @@
             <span asp-validation-for="product.Author" class="text-danger"></span>
         </div>
         <div class="mb-3 col-6">
-            <label asp-for="product.FinalPrice"></label>
-            <input asp-for="product.FinalPrice" class="form-control" />
-            <span asp-validation-for="product.FinalPrice" class="text-danger"></span>
+            <label asp-for="product.Price"></label>
+            <input asp-for="product.Price" class="form-control" />
+            <span asp-validation-for="product.Price" class="text-danger"></span>
         </div>
         <div class="mb-3 col-6">
             <label asp-for="product.ListPrice"></label>
@@ -49,7 +49,7 @@
         </div>
         <div class="mb-3">
             <label asp-for="product.ImageUrl"></label>
-            <input type="file" id="uploadBox" class="form-control" />
+            <input type="file" id="uploadBox" name="file" class="form-control" />
         </div>
         <div class="mb-3 col-6">
             <label asp-for="product.CategoryId"></label>

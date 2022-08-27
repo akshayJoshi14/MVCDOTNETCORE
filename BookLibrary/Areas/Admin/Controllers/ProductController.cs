@@ -12,10 +12,12 @@ namespace BookLibrary.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _hostEnviornment;
 
-        public ProductController(IUnitOfWork unitOfWork)
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment hostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _hostEnviornment = hostEnvironment;
         }
         public IActionResult Index()
         {
@@ -88,9 +90,24 @@ namespace BookLibrary.Areas.Admin.Controllers
             // in core, we can use ModelState.Isvalid as server side validation.
             if (ModelState.IsValid)
             {
-                 // _unitOfWork.Product.Update(obj);
+                string wwwRootPath = _hostEnviornment.WebRootPath;
+                if(file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploads = Path.Combine(wwwRootPath, @"images\products");
+                    var extenstion = Path.GetExtension(file.FileName);
+
+                    using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extenstion), FileMode.Create))
+                    {
+                        file.CopyTo(fileStreams);
+                    }
+                    obj.product.ImageUrl = @"images\products\" + fileName + extenstion;
+                }
+
+
+                _unitOfWork.Product.Add(obj.product);
                 _unitOfWork.Save();
-                TempData["success"] = "Product updated successfully";
+                TempData["success"] = "Product Created successfully";
                 return RedirectToAction("Index");
             }
             return View(obj);

@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20220811101530_AddCategoryToDatabase.cs" />
+    <Compile Remove="Migrations\20220811101530_AddCategoryToDatabase.Designer.cs" />
+    <Compile Remove="Migrations\20220816192822_AddCoverttypetodb.cs" />
+    <Compile Remove="Migrations\20220816192822_AddCoverttypetodb.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.8">

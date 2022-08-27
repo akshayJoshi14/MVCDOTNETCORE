@@ -30,7 +30,7 @@ namespace BookLibrary.DataAccess.Repository
             {
                 objFromDB.Title = obj.Title;
                 objFromDB.ISBN = obj.ISBN;
-                objFromDB.FinalPrice = obj.FinalPrice;
+                objFromDB.Price = obj.Price;
                 objFromDB.Price50 = obj.Price50;
                 objFromDB.ListPrice = obj.ListPrice;
                 objFromDB.Price100 = obj.Price100;
