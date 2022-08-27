@@ -82,13 +82,13 @@ namespace BookLibrary.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(Product obj)
+        public IActionResult Upsert(ProductVM obj, IFormFile file)
         {
 
             // in core, we can use ModelState.Isvalid as server side validation.
             if (ModelState.IsValid)
             {
-                _unitOfWork.Product.Update(obj);
+                 // _unitOfWork.Product.Update(obj);
                 _unitOfWork.Save();
                 TempData["success"] = "Product updated successfully";
                 return RedirectToAction("Index");
