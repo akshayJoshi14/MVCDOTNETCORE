@@ -21,34 +21,20 @@ namespace BookLibrary.Areas.Admin.Controllers
             return View(objProductList);
         }
 
-        // get CoverType create form load
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Product obj)
-        {
-            // in core, we can use ModelState.Isvalid as server side validation.
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Product.Add(obj);
-                _unitOfWork.Save();
-                TempData["success"] = "Product created successfully";
-                return RedirectToAction("Index");
-            }
-            return View(obj);
-        }
-
-
+       
         // Get Producttype create Edit form
-        public IActionResult Edit(int? id)
+        public IActionResult Upsert(int? id)
         {
+            Product product = new();
+
             if (id == null || id == 0)
             {
-                return NotFound();
+                // create product
+                return View(product);
+            }
+            else
+            {
+                // update product
             }
             var productFromDb = _unitOfWork.Product.GetFirstOrDefault(pro => pro.Id == id);
 
@@ -61,7 +47,7 @@ namespace BookLibrary.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Product obj)
+        public IActionResult Upsert(Product obj)
         {
 
             // in core, we can use ModelState.Isvalid as server side validation.
