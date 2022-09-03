@@ -21,8 +21,7 @@ namespace BookLibrary.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            IEnumerable<Product> objProductList = _unitOfWork.Product.GetAll();
-            return View(objProductList);
+            return View();
         }
 
        
@@ -146,5 +145,17 @@ namespace BookLibrary.Areas.Admin.Controllers
             return RedirectToAction("Index");
 
         }
+
+
+        #region Apicalls
+
+        [HttpGet]
+        public  IActionResult GetAll()
+        {
+            var productList = _unitOfWork.Product.GetAll();
+            return Json( new { data = productList });
+        }
+
+        #endregion
     }
 }
