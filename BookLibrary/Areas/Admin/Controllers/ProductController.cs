@@ -122,22 +122,6 @@ namespace BookLibrary.Areas.Admin.Controllers
             return View(obj);
         }
 
-        // Get CoverType create Edit form
-        public IActionResult Delete(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            var productFromDb = _unitOfWork.Product.GetFirstOrDefault(pro => pro.Id == id);
-
-            if (productFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(productFromDb);
-        }
-
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(int? id)
@@ -165,6 +149,30 @@ namespace BookLibrary.Areas.Admin.Controllers
             var productList = _unitOfWork.Product.GetAll(includeProperties:"Category,CoverType");
             return Json( new { data = productList });
         }
+
+        [HttpDelete]
+        public IActionResult Delete(int? id)
+        {
+            var obj = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
+
+            if (obj == null)
+            {
+                return Json(new { success = false, message = "Error while deleting" });
+            }
+            else
+            {
+                var oldImagePath = Path.Combine(_hostEnviornment.WebRootPath, obj.ImageUrl.TrimStart('\\'));
+                if (System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                }
+
+                _unitOfWork.Product.Remove(obj);
+                _unitOfWork.Save();
+                return Json(new { success = true, message = "Deleted sucesssfully" });
+            }
+        }
+
 
         #endregion
     }
