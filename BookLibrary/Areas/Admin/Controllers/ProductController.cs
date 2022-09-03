@@ -70,12 +70,7 @@ namespace BookLibrary.Areas.Admin.Controllers
             }
             else
             {
-                var productFromDb = _unitOfWork.Product.GetFirstOrDefault(pro => pro.Id == id);
-
-                if (productFromDb == null)
-                {
-                    return NotFound();
-                }
+                productVM.product = _unitOfWork.Product.GetFirstOrDefault(pro => pro.Id == id);
                 return View(productVM);
             }
         }
