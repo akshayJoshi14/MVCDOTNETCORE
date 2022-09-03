@@ -19,6 +19,7 @@ namespace BookLibrary.DataAccess.Repository
         public Repositary(ApplicationDbContext db)
         {
             _db = db;
+            //_db.Products.Include(u => u.Category);
             this.dbSet = _db.Set<T>();
         }
         public void Add(T entity)
@@ -26,17 +27,39 @@ namespace BookLibrary.DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        public IEnumerable<T> GetAll()
+        /// <summary>
+        /// If we want to include any other class proeprty we should send as include properties.
+        /// like "Categroy,CoverType"
+        /// </summary>
+        /// <param name="includeProperties">"propertyname"</param>
+        /// <returns></returns>
+        public IEnumerable<T> GetAll(string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
+
+            if(includeProperties != null)
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             return query.ToList();
         }
 
-        public T GetFirstOrDefault(Expression<Func<T, bool>> filter)
+        public T GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
 
             query = query.Where(filter);
+
+            if (includeProperties != null)
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
 
             return query.FirstOrDefault();
         }

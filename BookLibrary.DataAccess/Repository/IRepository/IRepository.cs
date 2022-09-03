@@ -10,7 +10,7 @@ namespace BookLibrary.DataAccess.Repository.IRepository
     public interface IRepository<T> where T : class
     {
         // T as Category class for now.
-        IEnumerable<T> GetAll();
+        IEnumerable<T> GetAll(string? includeProperties = null);
 
         void Add(T entity);
 
@@ -18,6 +18,6 @@ namespace BookLibrary.DataAccess.Repository.IRepository
 
         void RemoveRange(IEnumerable<T> entity);
 
-        T GetFirstOrDefault(Expression<Func<T, bool>> filter);
+        T GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includeProperties = null);
     }
 }
