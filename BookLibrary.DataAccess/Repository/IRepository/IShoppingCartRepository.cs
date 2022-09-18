@@ -9,6 +9,8 @@ namespace BookLibrary.DataAccess.Repository.IRepository
 {
     public interface IShoppingCartRepository: IRepository<ShoppingCart>
     {
-        void Save();
+        int IncrementCount(ShoppingCart shoppingCart, int count);
+
+        int DecrementCount(ShoppingCart shoppingCart, int count);
     }
 }
