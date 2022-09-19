@@ -56,7 +56,6 @@ namespace BookLibrary.Areas.Customer.Controllers
             else
             {
                 _unitOfWork.ShoppingCart.IncrementCount(cartFromDb, shoppingCart.Count);
-                _unitOfWork.ShoppingCart.Add(shoppingCart);
             }
 
             _unitOfWork.Save();
