@@ -118,6 +118,8 @@ namespace BookLibrary.Migrations
 
                     b.HasIndex("OrderId");
 
+                    b.HasIndex("ProductId");
+
                     b.ToTable("OrderDetail");
                 });
 
@@ -519,7 +521,7 @@ namespace BookLibrary.Migrations
 
                     b.HasOne("BookLibrary.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("OrderId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

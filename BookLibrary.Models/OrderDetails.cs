@@ -21,7 +21,7 @@ namespace BookLibrary.Models
 
         public int ProductId { get; set; }
 
-        [ForeignKey("OrderId")]
+        [ForeignKey("ProductId")]
         [ValidateNever]
         public Product Product { get; set; }
 
