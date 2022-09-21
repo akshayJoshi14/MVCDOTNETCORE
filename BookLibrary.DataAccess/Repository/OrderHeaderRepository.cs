@@ -27,7 +27,7 @@ namespace BookLibrary.DataAccess.Repository
             _db.OrderHeaders.Update(obj);
         }
 
-        public void UpdateStatus(int id, string orderStatus, string paymentStatus)
+        public void UpdateStatus(int id, string orderStatus, string? paymentStatus = null)
         {
             var orderFromDb = _db.OrderHeaders.FirstOrDefault(i => i.Id == id);
 
@@ -39,6 +39,15 @@ namespace BookLibrary.DataAccess.Repository
                     orderFromDb.PaymentStatus = paymentStatus;
                 }
             }
+        }
+
+
+        public void UpdateStripPaymentId(int id, string sessionId, string paymentIntentId)
+        {
+            var orderFromDb = _db.OrderHeaders.FirstOrDefault(i => i.Id == id);
+
+            orderFromDb.SessionId = sessionId;
+            orderFromDb.PaymentIntentId = paymentIntentId;
         }
     }
 }

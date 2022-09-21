@@ -4,6 +4,7 @@ using BookLibrary.Models.ViewModels;
 using BookLibrary.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stripe.Checkout;
 using System.Security.Claims;
 
 namespace BookLibrary.Areas.Customer.Controllers
@@ -88,7 +89,7 @@ namespace BookLibrary.Areas.Customer.Controllers
         [HttpPost]
         [ActionName("Summary")]
         [ValidateAntiForgeryToken]
-        
+
         public IActionResult SummaryPost()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -128,22 +129,85 @@ namespace BookLibrary.Areas.Customer.Controllers
                 _unitOfWork.Save();
             }
 
-            // remove from cart
-            _unitOfWork.ShoppingCart.RemoveRange(ShoppingCartVM.ListCart);
+            // stripe settings.
+            var domain = "https://localhost:44392/";
+
+            var options = new SessionCreateOptions
+            {
+                LineItems = new List<SessionLineItemOptions>(),
+                Mode = "payment",
+                SuccessUrl = domain+$"customer/cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
+                CancelUrl = domain + $"customer/cart/Index",
+            };
+
+            // add each itme we have in cart.
+            foreach (var item in ShoppingCartVM.ListCart)
+            {
+                var SessionLineItem = new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        UnitAmount = (long)(item.Price * 100), // 20.00 =>> 2000
+                        Currency = "usd",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = item.Product.Title,
+                        },
+
+                    },
+                    Quantity = item.Count,
+                };
+                options.LineItems.Add(SessionLineItem);
+            }
+
+            // create session for stipe
+            var service = new SessionService();
+            Session session = service.Create(options);
+
+            _unitOfWork.OrderHeader.UpdateStripPaymentId(ShoppingCartVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
             _unitOfWork.Save();
 
-            return RedirectToAction("Index","Home");
+
+            Response.Headers.Add("Location", session.Url);
+            return new StatusCodeResult(303);
+
+            // remove from cart
+            //_unitOfWork.ShoppingCart.RemoveRange(ShoppingCartVM.ListCart);
+            //_unitOfWork.Save();
+
+            //return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult OrderConfirmation(int id)
+        {
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == id);
+
+            var service = new SessionService();
+            Session session = service.Get(orderHeader.SessionId);
+
+            if (session.PaymentStatus.ToLower() == "paid")
+            {
+                _unitOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
+                _unitOfWork.Save();
+            }
+
+            // remove from cart
+            List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
+            _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
+            _unitOfWork.Save();
+
+            return View(id);
         }
 
         private double GetPriceBasedOnQuantity(double quantity, double price, double price50, double price100)
         {
-            if(quantity <= 50)
+            if (quantity <= 50)
             {
                 return price;
             }
             else
             {
-                if(quantity <= 100)
+                if (quantity <= 100)
                 {
                     return price50;
                 }
@@ -157,7 +221,7 @@ namespace BookLibrary.Areas.Customer.Controllers
         public IActionResult Plus(int cartId)
         {
             var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.Id == cartId);
-            _unitOfWork.ShoppingCart.IncrementCount(cart,1);
+            _unitOfWork.ShoppingCart.IncrementCount(cart, 1);
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
