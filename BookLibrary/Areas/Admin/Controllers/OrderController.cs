@@ -2,11 +2,14 @@
 using BookLibrary.DataAccess.Repository.IRepository;
 using BookLibrary.Models;
 using BookLibrary.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BookLibrary.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -28,8 +31,17 @@ namespace BookLibrary.Areas.Admin.Controllers
         {
             IEnumerable<OrderHeader> orderHeader;
 
-            orderHeader = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser");
-            
+            if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+            {
+                orderHeader = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser");
+            }
+            else
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+                orderHeader = _unitOfWork.OrderHeader.GetAll(u => u.ApplicationUserId == claim.Value,includeProperties: "ApplicationUser");
+            }
 
             switch (status)
             {
