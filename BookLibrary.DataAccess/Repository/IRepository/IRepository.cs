@@ -18,6 +18,6 @@ namespace BookLibrary.DataAccess.Repository.IRepository
 
         void RemoveRange(IEnumerable<T> entity);
 
-        T GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includeProperties = null);
+        T GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = true);
     }
 }

@@ -46,6 +46,7 @@ namespace BookLibrary.DataAccess.Repository
         {
             var orderFromDb = _db.OrderHeaders.FirstOrDefault(i => i.Id == id);
 
+            orderFromDb.PaymentDate = DateTime.Now;
             orderFromDb.SessionId = sessionId;
             orderFromDb.PaymentIntentId = paymentIntentId;
         }

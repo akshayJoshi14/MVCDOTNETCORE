@@ -20,6 +20,7 @@ namespace BookLibrary.DataAccess.Repository
         {
             _db = db;
             //_db.Products.Include(u => u.Category);
+            // _db.ShoppingCarts.AsNoTracking();
             this.dbSet = _db.Set<T>();
         }
         public void Add(T entity)
@@ -51,9 +52,19 @@ namespace BookLibrary.DataAccess.Repository
             return query.ToList();
         }
 
-        public T GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includeProperties = null)
+        public T GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = true)
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query;
+
+            // if tracked is false then whenever we pull that data and not tracking that entity.
+            if (tracked)
+            {
+                query = dbSet;
+            }
+            else
+            {
+                query = dbSet.AsNoTracking();
+            }
 
             query = query.Where(filter);
 
