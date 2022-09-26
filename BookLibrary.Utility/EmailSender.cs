@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.UI.Services;
+﻿using MailKit.Net.Smtp;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using MimeKit;
 
 namespace BookLibrary.Utility
 {
@@ -6,6 +8,20 @@ namespace BookLibrary.Utility
     {
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
+            //var emailToSend = new MimeMessage();
+            //emailToSend.From.Add(MailboxAddress.Parse("akki14192@gmail.com"));
+            //emailToSend.To.Add(MailboxAddress.Parse(email));
+            //emailToSend.Subject = subject;
+            //emailToSend.Body = new TextPart(MimeKit.Text.TextFormat.Html){ Text = htmlMessage };
+
+            //using (var emailClient = new SmtpClient())
+            //{
+            //    emailClient.Connect("smtp.gmail.com",587,MailKit.Security.SecureSocketOptions.StartTls);
+            //    emailClient.Authenticate("akki14192@gmail.com", "Test");
+            //    emailClient.Send(emailToSend);
+            //    emailClient.Disconnect(true);
+            //}
+
             return Task.CompletedTask;
         }
     }
