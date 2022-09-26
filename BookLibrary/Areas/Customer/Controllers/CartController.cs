@@ -3,6 +3,7 @@ using BookLibrary.Models;
 using BookLibrary.Models.ViewModels;
 using BookLibrary.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
@@ -20,10 +21,10 @@ namespace BookLibrary.Areas.Customer.Controllers
         [BindProperty]
         public ShoppingCartVM ShoppingCartVM { get; set; }
 
-        public CartController(IUnitOfWork unitOfWork, EmailSender emailSender)
+        public CartController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _emailSender = emailSender;
+            //_emailSender = emailSender;
         }
         public IActionResult Index()
         {
@@ -259,6 +260,8 @@ namespace BookLibrary.Areas.Customer.Controllers
             if (cart.Count == 1)
             {
                 _unitOfWork.ShoppingCart.Remove(cart);
+                var count = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == cart.ApplicationUserId).ToList().Count-1;
+                HttpContext.Session.SetInt32(SD.SessionCart, count);
             }
             else
             {
@@ -273,6 +276,8 @@ namespace BookLibrary.Areas.Customer.Controllers
             var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.Id == cartId);
             _unitOfWork.ShoppingCart.Remove(cart);
             _unitOfWork.Save();
+            var count = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == cart.ApplicationUserId).ToList().Count();\
+            HttpContext.Session.SetInt32(SD.SessionCart, count);
             return RedirectToAction(nameof(Index));
         }
     }
