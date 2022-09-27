@@ -220,7 +220,9 @@ namespace BookLibrary.Areas.Customer.Controllers
 
             // remove from cart
             List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
+            HttpContext.Session.Clear();
             _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
+
             _unitOfWork.Save();
 
             return View(id);
