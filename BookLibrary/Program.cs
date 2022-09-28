@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using BookLibrary.Utility;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Stripe;
+using BookLibrary.DataAccess.DBInitializer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProvid
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IDBInitializer, DBInitializer>();
 
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
@@ -69,7 +71,7 @@ app.UseRouting();
 
 // to add in pipeline
 StripeConfiguration.ApiKey = builder.Configuration.GetSection("StripeSettings:SecretKey").Get<string>();
-
+seedDatabase();
 app.UseAuthentication();
 
 app.UseAuthorization();
@@ -83,3 +85,12 @@ app.MapControllerRoute(
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+void seedDatabase()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbInitializer = scope.ServiceProvider.GetRequiredService<IDBInitializer>();
+        dbInitializer.Initialize();
+    }
+}
